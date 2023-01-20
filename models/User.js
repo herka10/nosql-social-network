@@ -1,32 +1,37 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
+const { stringify } = require('querystring');
 
 const userSchema = new Schema (
     {
         username: {
-            type: DataTypes.STRING,
+            type: String,
             unique: true,
             required: true,
             trim: true,
         }, 
         email: {
-            type: DataTypes.STRING,
+            type: String,
             required: true,
             unique: true, 
-            match: [`/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/`, 'Please fill a valid email address'],    
+            // match: [`/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/`, "Please fill a valid email address"],    
         },
         thoughts: [
             {
-                type: mongoose.Schema.Types.ObjectId, 
+                type: Schema.Types.ObjectId, 
                 ref: 'Thoughts'
             }
         ],
         friends: [
             {
-            type: mongoose.Schema.Types.ObjectId, 
+            type: Schema.Types.ObjectId, 
             ref: 'User'
             }
         ],
-    }
+    }, {
+        toJSON: {
+          virtuals: true,
+        }
+      }
 )
 
 userSchema.virtual('friendCount').get(function () {
