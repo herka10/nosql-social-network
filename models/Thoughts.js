@@ -9,13 +9,13 @@ const thoughtsSchema = new Schema (
             minLength: 1,
             maxLength: 280,
         }, 
-        createdAt: {
-            type: Date,
-            default: Date.now, 
-            get: (time) => {
-                return time.toISOString().split('T')[0];
-              }  
-        },
+        // createdAt: {
+        //     type: Date,
+        //     default: Date.now, 
+        //     get: (time) => {
+        //         return time.toISOString().split('T')[0];
+        //       }  
+        // },
         username: {
             type: String,
             required: true,

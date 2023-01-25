@@ -1,18 +1,12 @@
 const { User } = require('../models');
 
-// const friendsCount = async () =>
-//   User.aggregate([
-//     { $count: 'friendsCount' }
-//   ])
-//     .then((numberOfFriends) => numberOfFriends);
-
 module.exports = {
   // get all users
   find: async function (req, res) {
     try {
       const result = await User
         .find()
-        .populate('friends')
+        //result.friendCount()
       res.json(result)
     } catch (err) {
       res.status(500).json(err)
@@ -59,23 +53,26 @@ module.exports = {
     }
   },
 
-  // add a friend
-  // addFriend: async function (req, res) {
-  //   try {
-  //     const result = await User.create(
-  //       {_id: req.params.id},
-  //       { $addToSet: { friends: req.body }},
-  //       )
-  //     res.json(result)
-  //   } catch (err) {
-  //     res.status(500).json(err)
-  //   }
-  // },
+  //add a friend
+  addFriend: async function (req, res) {
+    try {
+      console.log('Friend Added')
+      const result = await User.findByIdAndUpdate(
+        {_id: req.params.id},
+        { $addToSet: { friends: req.params.friendId }})
+      res.json(result)
+    } catch (err) {
+      console.log(err)
+      res.status(500).json(err)
+    }
+  },
 
   // delete friend
-  removeFriend: async function (req, res) {
+  deleteFriend: async function (req, res) {
     try {
-      const result = await User.findByIdAndDelete(req.params.id)
+      const result = await User.findByIdAndUpdate  
+        ({_id: req.params.id},
+        { $unset: { friends: req.params.friendId }})
       res.json(result)
     } catch (err) {
       res.status(500).json(err)

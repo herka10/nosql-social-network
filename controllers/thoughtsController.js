@@ -56,4 +56,30 @@ module.exports = {
         res.status(500).json(err)
       }
     },
+
+    //add reaction
+  addReaction: async function (req, res) {
+    try {
+      console.log('Reaction Added')
+      const result = await Thoughts.findByIdAndUpdate(
+        {_id: req.params.id},
+        { $addToSet: { reactions: req.params.body }})
+      res.json(result)
+    } catch (err) {
+      console.log(err)
+      res.status(500).json(err)
+    }
+  },
+
+  // delete reaction
+  deleteReaction: async function (req, res) {
+    try {
+      const result = await Thoughts.findByIdAndUpdate  
+        ({_id: req.params.id},
+        { $unset: { reactions: req.params.reactionId }})
+      res.json(result)
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  },
 }
